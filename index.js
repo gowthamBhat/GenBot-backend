@@ -1,10 +1,14 @@
 const express = require('express')
 const cors = require('cors')
-
+require('dotenv').config()
 const app = express()
 const morgan = require('morgan')
+require('./database/db')()
 
+//* custom routes
 const MailRoute = require('./routes/MailRoute')
+const InviteRoute = require('./routes/invite')
+
 process.on('uncaughtException', (e) => {
   console.log('WE GOT AN UNCAUGHT EXCEPTION')
   console.log(e)
@@ -31,16 +35,7 @@ app.use(function timeLogger(req, res, next) {
 
 app.use('/uploads', express.static('uploads'))
 app.use('/mailroute', MailRoute)
-
-// const dataBaseUrl = 'mongodb://localhost:27017/foodies' //! need to be saved in ENV-VAR
-// mongoose
-//   .connect(dataBaseUrl)
-//   .then(() => {
-//     console.log(`connected to ${dataBaseUrl}`)
-//   })
-//   .catch((err) => {
-//     console.log('error encounterd', err)
-//   })
+app.use('/invite', InviteRoute)
 
 app.get('', (req, res) => {
   res.send('welcome bot')

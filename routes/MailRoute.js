@@ -1,7 +1,8 @@
 const express = require('express')
 
 const multer = require('multer')
-const Sender = require('../MailHandler/Mail')
+const { Submitter } = require('../MailHandler/Mail')
+const Candidate = require('../models/candidate')
 const router = express.Router()
 const stroage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -33,8 +34,29 @@ let uploadMultile = upload.fields([{ name: 'pdfFile', maxCount: 15 }])
 
 router.post('/', uploadMultile, async (req, res) => {
   try {
-    let aknowladgement = await Sender(req.files)
-    res.status(200).send({ process: 'success', akn: aknowladgement })
+    console.log(req.body)
+    console.log(req.files)
+    const username = req.body.username
+    const email = req.body.email
+
+    let aknowladgement = await Submitter(req.files, username, email)
+
+    const allFileNames = req.files.pdfFile.map((x) => {
+      return x.filename
+    })
+
+    const result = await Candidate.updateOne(
+      { email: req.body.email },
+      {
+        $set: {
+          status: `submitted`,
+          docs: allFileNames
+        }
+      },
+      { upsert: true }
+    )
+
+    res.status(200).send(aknowladgement)
   } catch (err) {
     console.log(err)
 
