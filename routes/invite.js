@@ -3,13 +3,16 @@ const router = express.Router()
 const Candidate = require('../models/candidate')
 const { inviter } = require('../MailHandler/Mail')
 router.post('/', async (req, res) => {
+  console.log('req from invite route', req)
+
   try {
     let invitation = new Candidate({
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       email: req.body.email,
       lastdatetosubmit: req.body.lastdate,
-      requiredDocs: req.body.requiredDocs
+      requiredDocs: req.body.requiredDocs,
+      designation: req.body.designation
     })
 
     let aknowladgement = await inviter(invitation)

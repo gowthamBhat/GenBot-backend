@@ -55,6 +55,7 @@ router.post('/', uploadMultile, async (req, res) => {
       },
       { upsert: true }
     )
+    console.log(result)
 
     res.status(200).send(aknowladgement)
   } catch (err) {

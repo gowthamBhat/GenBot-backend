@@ -8,6 +8,11 @@ require('./database/db')()
 //* custom routes
 const MailRoute = require('./routes/MailRoute')
 const InviteRoute = require('./routes/invite')
+const Submissions = require('./routes/Submissions')
+const Pendings = require('./routes/Pendings')
+const Accepted = require('./routes/Accepted')
+const Reminder = require('./routes/Reminder')
+const Status = require('./routes/Status')
 
 process.on('uncaughtException', (e) => {
   console.log('WE GOT AN UNCAUGHT EXCEPTION')
@@ -36,8 +41,13 @@ app.use(function timeLogger(req, res, next) {
 app.use('/uploads', express.static('uploads'))
 app.use('/mailroute', MailRoute)
 app.use('/invite', InviteRoute)
+app.use('/submissions', Submissions)
+app.use('/pendings', Pendings)
+app.use('/accepted', Accepted)
+app.use('/reminder', Reminder)
+app.use('/status', Status)
 
-app.get('', (req, res) => {
+app.get('/', (req, res) => {
   res.send('welcome bot')
 })
 

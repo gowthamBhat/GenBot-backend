@@ -61,13 +61,56 @@ async function inviter({ firstname, email, lastdatetosubmit, requiredDocs }) {
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
   return info.messageId
 }
+async function accepter(email, firstname) {
+  let transporter = createTransport()
+  let info = await transporter.sendMail({
+    from: process.env.GMAIL_USERNAME, // sender address
+    to: email, // list of receivers
+    subject: `Genpact requested docs accepted`,
+    // text: 'Hello world?', // plain text body
+    html: `<b>Hey ${firstname} greetings from Genpact, the docs are aproved by the BGC team </b>
+   ` // html body,
+  })
 
-// function checkPath(files) {
-//   const pathFilledArray = files.pdfFile.map((x) => {
-//     return { path: '../uploads/' + x.filename }
-//   })
-//   console.log(pathFilledArray)
-// }
-// Sender().catch(console.error)
+  console.log('Message sent: %s', info.messageId)
 
-module.exports = { Submitter, inviter }
+  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
+
+  return info.messageId
+}
+async function decliner(email, firstname) {
+  let transporter = createTransport()
+  let info = await transporter.sendMail({
+    from: process.env.GMAIL_USERNAME, // sender address
+    to: email, // list of receivers
+    subject: `Genpact requested docs accepted`,
+    // text: 'Hello world?', // plain text body
+    html: `<b>Hey ${firstname} greetings from Genpact, the docs rejected by the BGC team </b>
+   ` // html body,
+  })
+
+  console.log('Message sent: %s', info.messageId)
+
+  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
+
+  return info.messageId
+}
+async function Reminder(emails) {
+  let transporter = createTransport()
+  let info = await transporter.sendMail({
+    from: process.env.GMAIL_USERNAME, // sender address
+    to: emails, // list of receivers
+    subject: `Reminder to upload Docs`,
+    // text: 'Hello world?', // plain text body
+    html: `<b>Greetings from Genpact, please upload the documents for verification process before deadline </b>
+   `
+  })
+
+  console.log('Message sent: %s', info.messageId)
+
+  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
+
+  return info.messageId
+}
+
+module.exports = { Submitter, inviter, accepter, decliner, Reminder }

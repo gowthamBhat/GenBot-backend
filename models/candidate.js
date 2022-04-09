@@ -25,6 +25,9 @@ const candidateSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    designation: {
+      type: String
+    },
 
     lastdatetosubmit: {
       type: Date,
